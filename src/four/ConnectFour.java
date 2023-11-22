@@ -40,7 +40,8 @@ public class ConnectFour extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(mainPanel, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        getContentPane().setBackground(new Color(204, 229, 204));
+        //getContentPane().setBackground(Color.BLACK);
+        mainPanel.setBackground(Color.black);
 
         setVisible(true);
     }
@@ -60,28 +61,23 @@ public class ConnectFour extends JFrame {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 var c = checkButtons[i][j];
-                c.setText(" ");
-                c.setBackground(new Color(0, 51, 51));
+                c.setPlayer(Player.EMPTY_PIECE);
                 c.setEnabled(true);
             }
         }
         checkCorrectButtons.clear();
-
-
-        //mainPanel.removeAll();
-        //playBoard();
         gameEnded = false;
-        mainPanel.revalidate();
+//        mainPanel.revalidate();
         mainPanel.repaint();
         playerX = true;
     }
 
     public void playGame(Button button) {
         if (playerX) {
-            button.setText(GamePieces.X_PIECE.getName());
+            button.setPlayer(Player.X_PIECE);
             playerX = false;
         } else {
-            button.setText(GamePieces.O_PIECE.getName());
+            button.setPlayer(Player.O_PIECE);
             playerX = true;
         }
     }
@@ -90,12 +86,12 @@ public class ConnectFour extends JFrame {
         if(gameEnded){
             return;
         }
-        if (!Objects.equals(button.getText(), GamePieces.EMPTY_PIECE.getName())) {
+        if (!Objects.equals(button.player, Player.EMPTY_PIECE)) {
             return;
         }
         // checks from bottom to up if button is empty. So that when you click it appears at the bottom.
         for (int j = 5; j >= 0; j--) {
-            if (Objects.equals(checkButtons[j][button.column].getText(), GamePieces.EMPTY_PIECE.getName())) {
+            if (Objects.equals(checkButtons[j][button.column].player, Player.EMPTY_PIECE)) {
                 playGame(checkButtons[j][button.column]);
                 break;
             }
@@ -127,24 +123,29 @@ public class ConnectFour extends JFrame {
                 Button checkThirdButton = checkButtons[i][j + 2];
                 Button checkFourthButton = checkButtons[i][j + 3];
 
-                String textFirstButton = checkFirstButton.getText();
-                String textSecondButton = checkSecondButton.getText();
-                String textThirdButton = checkThirdButton.getText();
-                String textFourthButton = checkFourthButton.getText();
-
-                if ((textFirstButton.equals("X") || textFirstButton.equals("O")) &&
-                        textFirstButton.equals(textSecondButton) &&
-                        textSecondButton.equals(textThirdButton) &&
-                        textThirdButton.equals(textFourthButton)) {
-
-
-                    checkCorrectButtons.add(checkFirstButton);
-                    checkCorrectButtons.add(checkSecondButton);
-                    checkCorrectButtons.add(checkThirdButton);
-                    checkCorrectButtons.add(checkFourthButton);
-                    return true;
-                }
+                if (find(checkFirstButton, checkSecondButton, checkThirdButton, checkFourthButton)) return true;
             }
+        }
+        return false;
+    }
+
+    private boolean find(Button checkFirstButton, Button checkSecondButton, Button checkThirdButton, Button checkFourthButton) {
+        Player playerFirstButton = checkFirstButton.player;
+        Player playerSecondButton = checkSecondButton.player;
+        Player playerThirdButton = checkThirdButton.player;
+        Player playerFourthButton = checkFourthButton.player;
+
+        if ((playerFirstButton.equals(Player.X_PIECE) || playerFirstButton.equals(Player.O_PIECE)) &&
+                playerFirstButton.equals(playerSecondButton) &&
+                playerSecondButton.equals(playerThirdButton) &&
+                playerThirdButton.equals(playerFourthButton)) {
+
+
+            checkCorrectButtons.add(checkFirstButton);
+            checkCorrectButtons.add(checkSecondButton);
+            checkCorrectButtons.add(checkThirdButton);
+            checkCorrectButtons.add(checkFourthButton);
+            return true;
         }
         return false;
     }
@@ -158,22 +159,7 @@ public class ConnectFour extends JFrame {
                 Button checkThirdButton = checkButtons[i + 2][j];
                 Button checkFourthButton = checkButtons[i + 3][j];
 
-                String textFirstButton = checkFirstButton.getText();
-                String textSecondButton = checkSecondButton.getText();
-                String textThirdButton = checkThirdButton.getText();
-                String textFourthButton = checkFourthButton.getText();
-
-                if ((textFirstButton.equals("X") || textFirstButton.equals("O")) &&
-                        textFirstButton.equals(textSecondButton) &&
-                        textSecondButton.equals(textThirdButton) &&
-                        textThirdButton.equals(textFourthButton)) {
-
-                    checkCorrectButtons.add(checkFirstButton);
-                    checkCorrectButtons.add(checkSecondButton);
-                    checkCorrectButtons.add(checkThirdButton);
-                    checkCorrectButtons.add(checkFourthButton);
-                    return true;
-                }
+                if (find(checkFirstButton, checkSecondButton, checkThirdButton, checkFourthButton)) return true;
             }
         }
         return false;
@@ -187,22 +173,7 @@ public class ConnectFour extends JFrame {
                 Button checkThirdButton = checkButtons[i - 2][j + 2];
                 Button checkFourthButton = checkButtons[i - 3][j + 3];
 
-                String textFirstButton = checkFirstButton.getText();
-                String textSecondButton = checkSecondButton.getText();
-                String textThirdButton = checkThirdButton.getText();
-                String textFourthButton = checkFourthButton.getText();
-
-                if ((textFirstButton.equals("X") || textFirstButton.equals("O")) &&
-                        textFirstButton.equals(textSecondButton) &&
-                        textSecondButton.equals(textThirdButton) &&
-                        textThirdButton.equals(textFourthButton)) {
-
-                    checkCorrectButtons.add(checkFirstButton);
-                    checkCorrectButtons.add(checkSecondButton);
-                    checkCorrectButtons.add(checkThirdButton);
-                    checkCorrectButtons.add(checkFourthButton);
-                    return true;
-                }
+                if (find(checkFirstButton, checkSecondButton, checkThirdButton, checkFourthButton)) return true;
             }
         }
         return false;
@@ -217,25 +188,7 @@ public class ConnectFour extends JFrame {
                 Button checkThirdButton = checkButtons[i + 2][j + 2];
                 Button checkFourthButton = checkButtons[i + 3][j + 3];
 
-                String textFirstButton = checkFirstButton.getText();
-                String textSecondButton = checkSecondButton.getText();
-                String textThirdButton = checkThirdButton.getText();
-                String textFourthButton = checkFourthButton.getText();
-
-                if ((textFirstButton.equals("X") || textFirstButton.equals("O")) &&
-                        textFirstButton.equals(textSecondButton) &&
-                        textSecondButton.equals(textThirdButton) &&
-                        textThirdButton.equals(textFourthButton)) {
-
-
-
-                    checkCorrectButtons.add(checkFirstButton);
-                    checkCorrectButtons.add(checkSecondButton);
-                    checkCorrectButtons.add(checkThirdButton);
-                    checkCorrectButtons.add(checkFourthButton);
-
-                    return true;
-                }
+                if (find(checkFirstButton, checkSecondButton, checkThirdButton, checkFourthButton)) return true;
             }
         }
         return false;
@@ -243,7 +196,7 @@ public class ConnectFour extends JFrame {
 
     public void changeButtonColour(ArrayList<Button> buttons) {
         for (Button button : buttons) {
-            button.setBackground(Color.GREEN);
+            button.setPlayer(Player.WINNING_PIECE);
         }
     }
 }

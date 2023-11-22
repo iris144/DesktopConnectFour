@@ -1,19 +1,33 @@
 package four;
 
-public enum Player {;
-    //PLAYER_X,
-    //PLAYER_O;
+import java.awt.*;
 
-    private boolean isTurn;
+public enum Player {
+    X_PIECE(Color.red),
+    O_PIECE(Color.blue),
+    EMPTY_PIECE(Color.white),
+    WINNING_PIECE(Color.green);
 
-    Player(boolean turn) {
-        this.isTurn = turn;
+
+
+    private Color color;
+
+    private Player(Color color) {
+        this.color = color;
     }
-    public boolean isTurn() {
-        return isTurn;
+    public Color getColor() {
+        return color;
     }
 
-    public boolean setTurn() {
-        return false;
+   /*
+    private final String name;
+
+    GamePieces(String name) {
+        this.name = name;
     }
+    public String getName() {
+        return name;
+    }
+
+    */
 }
