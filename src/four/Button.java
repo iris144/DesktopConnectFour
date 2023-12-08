@@ -1,6 +1,5 @@
 package four;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -11,41 +10,37 @@ public class Button extends JButton {
     int column;
     int row;
     String coordinate;
+    Player player = Player.EMPTY;
 
     public void setPlayer(Player player) {
         this.player = player;
         this.repaint();
     }
 
-    Player player = Player.EMPTY_PIECE;
-
     public Button(int column, int row) {
         this.column = column;
         this.row = row;
         this.coordinate = (columnLabels.charAt(column) + "" + rowLabels.charAt(row));
         this.setName("Button" + coordinate);
-        //setBorder(new RoundedBorder(100));
-        //setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        this.setRolloverEnabled(false);
         setForeground(Color.black);
         setFocusPainted(false);
-        setBorderPainted(true);
-
-
     }
 
+
+
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int diameter = Math.min(getWidth(), getHeight());
-        Shape circle = new Ellipse2D.Float(0, 0, diameter, diameter);
+        int xOffset = (getWidth() - diameter) / 2;
+        int yOffset = (getHeight() - diameter) / 2;
+        Shape circle = new Ellipse2D.Float(xOffset, yOffset, diameter, diameter);
 
-        g2.setColor(getColor());
-        g2.fill(circle);
-//        g2.setColor(getForeground());
-//        g2.drawString(getText(), getWidth() / 2 - g2.getFontMetrics().stringWidth(getText()) / 2, getHeight() / 2 + g2.getFontMetrics().getAscent() / 2);
-
-        g2.dispose();
+        g2d.setColor(getColor());
+        g2d.fill(circle);
+        g2d.dispose();
     }
 
     private Color getColor() {
@@ -56,6 +51,8 @@ public class Button extends JButton {
     protected void paintBorder(Graphics g) {
         // Suppress painting the border
     }
+
+
 }
 
 

@@ -12,6 +12,7 @@ public class ConnectFour extends JFrame {
     private final int column = 7;
     private final Button[][] checkButtons = new Button[row][column];
     private final JPanel mainPanel;
+    private final JPanel lowerPanel;
     private boolean gameEnded = false;
     private final ArrayList<Button> checkCorrectButtons = new ArrayList<>();
 
@@ -19,28 +20,27 @@ public class ConnectFour extends JFrame {
 
     public ConnectFour() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 600);
-
+        setSize(1000, 1000);
         setTitle("Connect Four");
+        setLocationRelativeTo(null);
 
+
+        // creating possible panel for saying whose turn it is and who won
+        JPanel upperPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        //creating new panel for the playboard
         mainPanel = new JPanel(new GridLayout(6, 7, 10, 10));
-        mainPanel.setPreferredSize(new Dimension(300, 300));
         playBoard();
 
-        JButton resetButton = new JButton("Reset");
-        resetButton.setName("ButtonReset");
-        resetButton.addActionListener(e -> resetGrid());
-        resetButton.setBackground(new Color(51, 51, 51));
-        resetButton.setForeground(Color.white);
-        resetButton.setFocusPainted(false);
-        resetButton.setEnabled(true);
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(resetButton);
+        //creating new panel for the reset button
+        lowerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        lowerPanel.add(new ResetButton(e -> resetGrid()));
+
 
         getContentPane().setLayout(new BorderLayout());
+        //getContentPane().add(upperPanel,BorderLayout.NORTH);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        //getContentPane().setBackground(Color.BLACK);
+        getContentPane().add(lowerPanel, BorderLayout.SOUTH);
         mainPanel.setBackground(Color.black);
 
         setVisible(true);
@@ -61,23 +61,23 @@ public class ConnectFour extends JFrame {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 var c = checkButtons[i][j];
-                c.setPlayer(Player.EMPTY_PIECE);
+                c.setText(" ");
+                c.setPlayer(Player.EMPTY);
                 c.setEnabled(true);
             }
         }
         checkCorrectButtons.clear();
         gameEnded = false;
-//        mainPanel.revalidate();
         mainPanel.repaint();
         playerX = true;
     }
 
     public void playGame(Button button) {
         if (playerX) {
-            button.setPlayer(Player.X_PIECE);
+            button.setPlayer(Player.RED);
             playerX = false;
         } else {
-            button.setPlayer(Player.O_PIECE);
+            button.setPlayer(Player.BLUE);
             playerX = true;
         }
     }
@@ -86,12 +86,12 @@ public class ConnectFour extends JFrame {
         if(gameEnded){
             return;
         }
-        if (!Objects.equals(button.player, Player.EMPTY_PIECE)) {
+        if (!Objects.equals(button.player, Player.EMPTY)) {
             return;
         }
         // checks from bottom to up if button is empty. So that when you click it appears at the bottom.
         for (int j = 5; j >= 0; j--) {
-            if (Objects.equals(checkButtons[j][button.column].player, Player.EMPTY_PIECE)) {
+            if (Objects.equals(checkButtons[j][button.column].player, Player.EMPTY)) {
                 playGame(checkButtons[j][button.column]);
                 break;
             }
@@ -135,7 +135,7 @@ public class ConnectFour extends JFrame {
         Player playerThirdButton = checkThirdButton.player;
         Player playerFourthButton = checkFourthButton.player;
 
-        if ((playerFirstButton.equals(Player.X_PIECE) || playerFirstButton.equals(Player.O_PIECE)) &&
+        if ((playerFirstButton.equals(Player.RED) || playerFirstButton.equals(Player.BLUE)) &&
                 playerFirstButton.equals(playerSecondButton) &&
                 playerSecondButton.equals(playerThirdButton) &&
                 playerThirdButton.equals(playerFourthButton)) {
@@ -196,7 +196,7 @@ public class ConnectFour extends JFrame {
 
     public void changeButtonColour(ArrayList<Button> buttons) {
         for (Button button : buttons) {
-            button.setPlayer(Player.WINNING_PIECE);
+            button.setPlayer(Player.WIN);
         }
     }
 }

@@ -3,31 +3,17 @@ package four;
 import java.awt.*;
 
 public enum Player {
-    X_PIECE(Color.red),
-    O_PIECE(Color.blue),
-    EMPTY_PIECE(Color.white),
-    WINNING_PIECE(Color.green);
+    RED(Color.red),
+    BLUE(Color.blue),
+    EMPTY(Color.white),
+    WIN(Color.green);
 
-
-
-    private Color color;
-
-    private Player(Color color) {
+    private final Color color;
+   Player(Color color) {
         this.color = color;
     }
     public Color getColor() {
         return color;
     }
 
-   /*
-    private final String name;
-
-    GamePieces(String name) {
-        this.name = name;
-    }
-    public String getName() {
-        return name;
-    }
-
-    */
 }
